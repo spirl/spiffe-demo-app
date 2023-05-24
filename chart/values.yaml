@@ -1,0 +1,16 @@
+# Default values for spiffe-demo-app.
+
+image:
+  # -- The OCI registry to pull the image from
+  registry: ghcr.io
+  # -- The repository within the registry
+  repository: elinesterov/spiffe-demo-app
+  # -- The image tag to pull
+  tag: latest
+  # -- The image pull policy
+  pullPolicy: IfNotPresent
+
+# -- The service type to use
+service:
+  type: LoadBalancer
+  port: 80
