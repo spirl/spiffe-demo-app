@@ -6,7 +6,7 @@ image:
   # -- The repository within the registry
   repository: elinesterov/spiffe-demo-app
   # -- The image tag to pull
-  tag: latest
+  tag: v0.1.1
   # -- The image pull policy
   pullPolicy: IfNotPresent
 
