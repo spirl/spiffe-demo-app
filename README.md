@@ -67,3 +67,13 @@ helm delete spiffe-demo
 ```
 
 ## Values
+
+See also [charts/spiffe-demo-app/README.md](charts/spiffe-demo-app/README.md)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| image.pullPolicy | string | `"IfNotPresent"` | The image pull policy |
+| image.registry | string | `"ghcr.io"` | The OCI registry to pull the image from |
+| image.repository | string | `"elinesterov/spiffe-demo-app"` | The repository within the registry |
+| image.tag | string | `"latest"` | The image tag to pull |
+| service | object | `{"port":80,"type":"LoadBalancer"}` | The service type to use |
