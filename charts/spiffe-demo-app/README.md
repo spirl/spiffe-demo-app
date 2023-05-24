@@ -1,6 +1,6 @@
 # spiffe-demo-app
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.1](https://img.shields.io/badge/AppVersion-0.1.1-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.1](https://img.shields.io/badge/AppVersion-0.1.1-informational?style=flat-square)
 
 A Helm chart to install spiffe-demo-app
 
@@ -11,7 +11,7 @@ A Helm chart to install spiffe-demo-app
 | image.pullPolicy | string | `"IfNotPresent"` | The image pull policy |
 | image.registry | string | `"ghcr.io"` | The OCI registry to pull the image from |
 | image.repository | string | `"elinesterov/spiffe-demo-app"` | The repository within the registry |
-| image.tag | string | `"latest"` | The image tag to pull |
+| image.tag | string | `"v0.1.1"` | The image tag to pull |
 | service | object | `{"port":80,"type":"LoadBalancer"}` | The service type to use |
 
 ----------------------------------------------
