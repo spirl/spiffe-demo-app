@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-spiffe-app
+  name: {{ .Release.Name }}-app
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
