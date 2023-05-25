@@ -14,3 +14,17 @@ image:
 service:
   type: LoadBalancer
   port: 80
+
+# -- The App configuration
+app:
+  # -- SPIFFE agent socket mount path
+  spiffeSocketMountPathDir: /spiffe-workload-api
+  # -- Add SPIFFE CSIdirver volume
+  spiffeCSIDriverVolume: true
+  # -- Enable busybox container
+  enableBusybox: false
+
+# -- SPIFFE CSI driver support
+spiffeCSIDriver:
+  # -- Enable/disable SPIFFE CSI driver support
+  enabled: true

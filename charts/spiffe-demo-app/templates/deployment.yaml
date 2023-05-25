@@ -19,6 +19,33 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
           - name: SPIFFE_ENDPOINT_SOCKET
-            value: "unix:///spiffe-workload-api/spire-agent.sock"
+            value: "unix://{{ .Values.app.spiffeSocketMountPathDir }}/agent.sock"
         ports:
         - containerPort: 8080
+      {{- if .Values.app.spiffeCSIDriverVolume }}
+        volumeMounts:
+        - name: spiffe-csi-driver-volume
+          mountPath: {{ .Values.app.spiffeSocketMountPathDir }}
+      {{- end }}
+      {{- if .Values.app.enableBusybox }}
+      - name: busybox
+        image: busybox
+        command: ['sleep', '3600']
+        env:
+          - name: SPIFFE_ENDPOINT_SOCKET
+            value: "unix://{{ .Values.app.spiffeSocketMountPathDir }}/agent.sock"
+        imagePullPolicy: IfNotPresent
+        {{- if .Values.app.spiffeCSIDriverVolume }}
+        volumeMounts:
+          - name: spiffe-csi-driver-volume
+            mountPath: {{ .Values.app.spiffeSocketMountPathDir }}
+            readOnly: true
+        {{- end }}
+      {{- end }}
+      {{- if .Values.app.spiffeCSIDriverVolume }}
+      volumes:
+      - name: spiffe-csi-driver-volume
+        csi:
+          driver: "csi.spiffe.io"
+          readOnly: true
+      {{- end }}
