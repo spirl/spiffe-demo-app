@@ -142,7 +142,7 @@ Since we use kind cluster in this example, the easiest way to connect to a front
 With kind run the following command to enable port-frwarding to the spiffe-demo-app frontend:
 
 ```bash
-$ kubectl port-forward  svc/spiffe-demo-service 8080:80
+$ kubectl -n spiffe-demo port-forward  svc/spiffe-demo-service 8080:80
 
 Forwarding from 127.0.0.1:8080 -> 8080
 Forwarding from [::1]:8080 -> 8080
