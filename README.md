@@ -4,6 +4,14 @@ SPIFFE Demo application is a simple demo app that uses SPIFFE Workload API.
 The app consists of two parts: frontend and backend.
 Frontend provides simple functionality to view the content of SPIFFE X509-SVID, JWT-SVID, and SPIFFE Trust Bundle through simple UI.
 
+You can use it to troubleshoot things like SPIFFE federation (because you can see the trust bundle content):
+
+![SPIFFE trust bundle content](img/trust-bundle.png?raw=true "SPIFFE trust bundle content")
+
+Or easily view X509-SVID or JWT-SVID details:
+
+![X509-SVID details](img/x509-svid.png?raw=true "X509-SVID details")
+
 ## Prerequisites
 
 You'll need `kubectl` and `helm` installed. Follow the official documentation for both projects on how to install them:
