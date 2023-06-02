@@ -31,4 +31,4 @@ app:
 # -- SPIFFE CSI driver support
 spiffeCSIDriver:
   # -- Enable/disable SPIFFE CSI driver support
-  enabled: true
+  enabled: false

@@ -140,7 +140,7 @@ Also, since SPIRE Helm Chart installs SPIFFE CSI Driver we need to disable it in
 You can use the following command with a few parameters or you may choose to set them in your `values.yaml` for a helm chart.
 
 ```bash
-$ helm -n spiffe-demo install spiffe-demo  spiffe-demo/spiffe-demo-app --set app.spiffeSocketName=spire-agent.sock --set spiffeCSIDriver.enabled=false
+$ helm -n spiffe-demo install spiffe-demo  spiffe-demo/spiffe-demo-app --set app.spiffeSocketName=spire-agent.sock
 ```
 
 ### 6. Connecting to the spiffe-demo-app
