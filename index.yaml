@@ -3,6 +3,16 @@ entries:
   spiffe-demo-app:
   - apiVersion: v2
     appVersion: 0.1.1
+    created: "2023-06-02T03:09:56.228503041Z"
+    description: A Helm chart to install spiffe-demo-app
+    digest: b3f64e53e466d9be41bfb2c9dca9e3e28a9755c65c16f0711e5435aef5810796
+    name: spiffe-demo-app
+    type: application
+    urls:
+    - https://github.com/elinesterov/spiffe-demo-app/releases/download/spiffe-demo-app-0.2.2/spiffe-demo-app-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 0.1.1
     created: "2023-05-26T23:21:14.395403294Z"
     description: A Helm chart to install spiffe-demo-app
     digest: 5ba203e93ebc3ba835edcbcc581f364466e10b5d192f67a9d6b87957ac400a33
@@ -51,4 +61,4 @@ entries:
     urls:
     - https://github.com/elinesterov/spiffe-demo-app/releases/download/spiffe-demo-app-0.1.0/spiffe-demo-app-0.1.0.tgz
     version: 0.1.0
-generated: "2023-05-26T23:21:14.395420195Z"
+generated: "2023-06-02T03:09:56.228850249Z"
