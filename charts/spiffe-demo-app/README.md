@@ -16,7 +16,7 @@ A Helm chart to install spiffe-demo-app
 | image.pullPolicy | string | `"IfNotPresent"` | The image pull policy |
 | image.registry | string | `"ghcr.io"` | The OCI registry to pull the image from |
 | image.repository | string | `"elinesterov/spiffe-demo-app"` | The repository within the registry |
-| image.tag | string | `"v0.1.1"` | The image tag to pull |
+| image.tag | string | `"v0.2.0"` | The image tag to pull |
 | service | object | `{"port":80,"type":"LoadBalancer"}` | The service type to use |
 | spiffeCSIDriver | object | `{"enabled":false}` | SPIFFE CSI driver support |
 | spiffeCSIDriver.enabled | bool | `false` | Enable/disable SPIFFE CSI driver support |
