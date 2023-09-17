@@ -1,6 +1,6 @@
 # spiffe-demo-app
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart to install spiffe-demo-app
 
@@ -8,9 +8,10 @@ A Helm chart to install spiffe-demo-app
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| app | object | `{"enableBusybox":false,"spiffeCSIDriverVolume":true,"spiffeSocketMountPathDir":"/spiffe-workload-api","spiffeSocketName":"agent.sock"}` | The App configuration |
+| app | object | `{"enableBusybox":false,"spiffeCSIDriverInjectionEnabled":true,"spiffeCSIDriverVolume":false,"spiffeSocketMountPathDir":"/spiffe-workload-api","spiffeSocketName":"agent.sock"}` | The App configuration |
 | app.enableBusybox | bool | `false` | Enable busybox container |
-| app.spiffeCSIDriverVolume | bool | `true` | Add SPIFFE CSIdirver volume |
+| app.spiffeCSIDriverInjectionEnabled | bool | `true` | SPIRL SPIFFE CSI injeciton enabled |
+| app.spiffeCSIDriverVolume | bool | `false` | Add SPIFFE CSIdirver volume |
 | app.spiffeSocketMountPathDir | string | `"/spiffe-workload-api"` | SPIFFE Workload API socket mount path |
 | app.spiffeSocketName | string | `"agent.sock"` | SPIFFE Workload API socket name exposed by the agent the resulting default socket path will be /spiffe-workload-api/agent.sock spiffeSocketName is a filename from the socket path for the agent |
 | image.pullPolicy | string | `"IfNotPresent"` | The image pull policy |

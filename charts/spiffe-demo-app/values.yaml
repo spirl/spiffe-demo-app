@@ -17,6 +17,8 @@ service:
 
 # -- The App configuration
 app:
+  # -- SPIRL SPIFFE CSI injeciton enabled
+  spiffeCSIDriverInjectionEnabled: true
   # -- SPIFFE Workload API socket mount path
   spiffeSocketMountPathDir: /spiffe-workload-api
   # -- SPIFFE Workload API socket name exposed by the agent
@@ -24,7 +26,7 @@ app:
   # spiffeSocketName is a filename from the socket path for the agent
   spiffeSocketName: agent.sock
   # -- Add SPIFFE CSIdirver volume
-  spiffeCSIDriverVolume: true
+  spiffeCSIDriverVolume: false
   # -- Enable busybox container
   enableBusybox: false
 
