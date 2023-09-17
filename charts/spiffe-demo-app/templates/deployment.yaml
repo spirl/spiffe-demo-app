@@ -12,28 +12,35 @@ spec:
     metadata:
       labels:
         app: spiffe-demo-app
+        {{- if .Values.app.spiffeCSIDriverInjectionEnabled }}
+        k8s.spirl.com/spiffe-csi: enabled
+        {{- end }}
     spec:
       containers:
       - name: spiffe-demo-app
         image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- if not .Values.app.spiffeCSIDriverInjectionEnabled }}
         env:
           - name: SPIFFE_ENDPOINT_SOCKET
             value: "unix://{{ .Values.app.spiffeSocketMountPathDir }}/{{ .Values.app.spiffeSocketName }}"
+        {{- end }}
         ports:
         - containerPort: 8080
-      {{- if .Values.app.spiffeCSIDriverVolume }}
+        {{- if .Values.app.spiffeCSIDriverVolume }}
         volumeMounts:
         - name: spiffe-csi-driver-volume
           mountPath: {{ .Values.app.spiffeSocketMountPathDir }}
-      {{- end }}
+        {{- end }}
       {{- if .Values.app.enableBusybox }}
       - name: busybox
         image: busybox
         command: ['sleep', '3600']
+        {{- if not .Values.app.spiffeCSIDriverInjectionEnabled }}
         env:
           - name: SPIFFE_ENDPOINT_SOCKET
             value: "unix://{{ .Values.app.spiffeSocketMountPathDir }}/{{ .Values.app.spiffeSocketName }}"
+        {{- end }}
         imagePullPolicy: IfNotPresent
         {{- if .Values.app.spiffeCSIDriverVolume }}
         volumeMounts:
