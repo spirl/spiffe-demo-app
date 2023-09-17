@@ -16,6 +16,7 @@ spec:
         k8s.spirl.com/spiffe-csi: enabled
         {{- end }}
     spec:
+      serviceAccountName: {{ .Release.Name }}-app
       containers:
       - name: spiffe-demo-app
         image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
