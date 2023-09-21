@@ -10,6 +10,9 @@ image:
   # -- The image pull policy
   pullPolicy: IfNotPresent
 
+# -- Image used for busybox when enabled
+busyboxImage: busybox
+
 # -- The service type to use
 service:
   type: LoadBalancer
