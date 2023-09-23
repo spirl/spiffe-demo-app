@@ -2,4 +2,4 @@ apiVersion: v2
 name: spiffe-demo-app
 description: A Helm chart to install spiffe-demo-app
 type: application
-version: 0.3.3
+version: 0.3.4
