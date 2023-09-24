@@ -1,6 +1,6 @@
 # spiffe-demo-app
 
-![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.5](https://img.shields.io/badge/Version-0.3.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart to install spiffe-demo-app
 
@@ -14,10 +14,11 @@ A Helm chart to install spiffe-demo-app
 | app.spiffeCSIDriverVolume | bool | `false` | Add SPIFFE CSIdirver volume |
 | app.spiffeSocketMountPathDir | string | `"/spiffe-workload-api"` | SPIFFE Workload API socket mount path |
 | app.spiffeSocketName | string | `"agent.sock"` | SPIFFE Workload API socket name exposed by the agent the resulting default socket path will be /spiffe-workload-api/agent.sock spiffeSocketName is a filename from the socket path for the agent |
+| busyboxImage | string | `"busybox"` | Image used for busybox when enabled |
 | image.pullPolicy | string | `"IfNotPresent"` | The image pull policy |
 | image.registry | string | `"ghcr.io"` | The OCI registry to pull the image from |
 | image.repository | string | `"elinesterov/spiffe-demo-app"` | The repository within the registry |
-| image.tag | string | `"v0.2.1"` | The image tag to pull |
+| image.tag | string | `"v0.2.2"` | The image tag to pull |
 | service | object | `{"port":80,"type":"LoadBalancer"}` | The service type to use |
 | spiffeCSIDriver | object | `{"enabled":false}` | SPIFFE CSI driver support |
 | spiffeCSIDriver.enabled | bool | `false` | Enable/disable SPIFFE CSI driver support |
