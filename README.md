@@ -40,10 +40,10 @@ REVISION: 1
 TEST SUITE: None
 ```
 
-That will install the app in the `default` namespace. If you want to install to a different namespace, you need to create it first via `kubectl create namespace foo' and then add `--namespace` flag to the above command:
+That will install the app in the `default` namespace. If you want to install to a different namespace, you need to add `--create-namespace` flag to the above command:
 
 ```bash
-$ helm install spiffe-demo spiffe-demo/spiffe-demo-app --namespace foo
+$ helm install spiffe-demo spiffe-demo/spiffe-demo-app --namespace foo --create-namespace
 
 NAME: spiffe-demo
 LAST DEPLOYED: Wed May 24 10:39:28 2023
@@ -76,8 +76,8 @@ Now you can point your browser to [http://localhost:8080](http://localhost:8080)
 
 ## Example of using with SPIRE Helm Chart
 
-SPIFFE community recently released a verison SPIRE Helm Chart which provides a really easy way of starting and playing with SPIRE.
-Instructions below are for the SPIRE Helm Chart Version v0.8.0.
+SPIFFE community support SPIRE Helm Chart which provides a way to install SPIRE in k8s cluster for a quick start.
+Check for the latest version of SPIRE Helm Chart installation instructions [here](https://artifacthub.io/packages/helm/spiffe/spire#install-instructions).
 
 I'll use [kind](https://kind.sigs.k8s.io/) as an example but you can use any other k8s distribution with a little bit of adjusment (e.g. don't use `port-forwarding`)
 
@@ -98,52 +98,32 @@ You can now use your cluster with:
 kubectl cluster-info --context kind-spire-demo
 ```
 
-### 2. Create namespaces
+### 2. Install SPIRE Helm Charts
 
-We need two namespaces: one for SPIRE deployment and another one for the `spiffe-demo-app`
-
-```bash
-$ kubectl create namespace spire
-$ kubectl create namespace spiffe-demo
-```
-
-### 3. Install helm and add SPIRE Helm Charts and spiffe-demo-app repos
-
-First of all add SPIFFE repo:
+Install SPIRE:
 
 ```bash
-$ helm repo add spiffe https://spiffe.github.io/helm-charts/
-
+helm upgrade --install -n spire-server spire-crds spire-crds --repo https://spiffe.github.io/helm-charts-hardened/ --create-namespace
+helm upgrade --install -n spire-server spire spire --repo https://spiffe.github.io/helm-charts-hardened/
 ```
 
-If you already have it, make sure you updated it via `helm repo update` command.
+### 3. Install spiffe-demo-app
 
-Now add spiffe-demo-app Helm Chart:
+[SPIRE Helm Chart](https://github.com/spiffe/helm-charts-hardened/tree/main/charts/spire) by default uses SPIFFE Workload API socket with a name `spire-agent.sock`. However, `spiffe-demo-app` by [default](charts/spiffe-demo-app/README.md) expects the name for a socket `agent.sock`. Therefore we need to change it.
+
+To install SPIFFE Demo App you can use the following command with a few parameters or you may choose to set them in your `values.yaml` for a helm chart.
 
 ```bash
-$ helm repo add spiffe-demo https://elinesterov.github.io/spiffe-demo-app
+helm upgrade --install spiffe-demo spiffe-demo-app --repo https://elinesterov.github.io/spiffe-demo-app -n spiffe-demo --create-namespace --set app.spiffeSocketName=spire-agent.sock --set app.spiffeCSIDriverInjectionEnabled=false --set app.spiffeCSIDriverVolume=true
 ```
 
-### 4. Install SPIRE
+* `app.spiffeSocketName` - is a name of the SPIFFE Workload API socket that is exposed by SPIFFE Agent. By default, SPIRE Helm Chart uses `spire-agent.sock` name for the socket. However, `spiffe-demo-app` expects `agent.sock` name. Therefore we need to change it.
 
-We don't do any changes to default values. SPIRE chart at this point enables `spire-controller-manager` and `spiffe-csi-driver` by default, so you don't need to do anything.
+* `app.spiffeCSIDriverInjectionEnabled` - is a flag that enables or disables the SPIRL COntroller Manager that injects SPIFFE CSIDriver Volume and env variable. Since SPIRE Helm Cart doesn't have such a feature we need to disable it.
 
-```bash
-$ helm -n spire install spire spiffe/spire --version 0.8.0
-```
+* `app.spiffeCSIDriverVolume` - flag that enables SPIFFE CSI Driver Volume mount and also set `SPIFFE_ENDPOINT_SOCKET` environment variable to the path of the SPIFFE Workload API socket. This is required for the `spiffe-demo-app` to connect to the SPIFFE Agent. Since we cannot use SPIRL Controller Manager with SPIRE we should manually set these values.
 
-### 5. Install spiffe-demo-app
-
-[SPIRE Helm Chart](https://github.com/spiffe/helm-charts/tree/main/charts/spire) by default uses `spire-agent.socketPath` with a value `/run/spire/agent-sockets/spire-agent.sock` that in combination with a [SPIFFE CSI Driver](https://github.com/spiffe/spiffe-csi) creates SPIFFE Workload API socket with a name `spire-agent.sock`. However, `spiffe-demo-app` by [default](charts/spiffe-demo-app/README.md) expects the name for a socket `agent.sock`. Therefore we need to change it.
-Also, since SPIRE Helm Chart installs SPIFFE CSI Driver we need to disable it in `spiffe-demo-app`.
-
-You can use the following command with a few parameters or you may choose to set them in your `values.yaml` for a helm chart.
-
-```bash
-$ helm -n spiffe-demo install spiffe-demo  spiffe-demo/spiffe-demo-app --set app.spiffeSocketName=spire-agent.sock
-```
-
-### 6. Connecting to the spiffe-demo-app
+### 4. Connecting to the spiffe-demo-app
 
 Since we use kind cluster in this example, the easiest way to connect to a frontend is by using kubectl port-frowarding feature. If you use minikube, eks or any other flavour of k8s you might be able to use node port or LoadBalancer.
 
@@ -158,21 +138,22 @@ Forwarding from [::1]:8080 -> 8080
 
 Now you can point your browser to [http://localhost:8080](http://localhost:8080) to connect to the frontend. Clock buttons to see JWT-SVID, X509-SVID and expore SPIFFE Trust Bundle in a very simple way.
 
-### 7. Using busybox for troubleshooting
+### 5. Using busybox for troubleshooting
 
 Sometimes you need to run a few simple shell commands to list mounted agent socket content or for any other reason. We have `busybox` container withtin the spiffe-demo-app deployemnt that is disabled by default. In order to enable it you can add `--set app.enableBusybox=true` when installing `spiffe-demo-app` helm chart.
 
-### 8. Cleaning up
+### 6. Cleaning up
 
 Cleaning up is simple:
 
 ```bash
-$ helm -n spiffe-demo delete spiffe-demo
-$ helm -n spire delete spire
-$ kubectl delete namespace spire
-$ kubectl delete namespace spiffe-demo
-$ kind delete cluster --name spire-dem
+helm -n spiffe-demo delete spiffe-demo
+helm -n spire delete spire
+kubectl delete namespace spire
+kubectl delete namespace spiffe-demo
+kind delete cluster --name spire-dem
 ```
+
 or you can just execute the lates command in case of kind.
 
 ## Values
