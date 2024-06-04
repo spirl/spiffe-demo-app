@@ -24,7 +24,7 @@ You'll need `kubectl` and `helm` installed. Follow the official documentation fo
 ### Add SPIFFE Demo Helm Chart
 
 ```bash
-helm repo add spiffe-demo https://elinesterov.github.io/spiffe-demo-app
+helm repo add spiffe-demo https://spirl.github.io/spiffe-demo-app
 ```
 
 ### Install the chart
@@ -33,7 +33,7 @@ helm repo add spiffe-demo https://elinesterov.github.io/spiffe-demo-app
 $ helm install spiffe-demo spiffe-demo/spiffe-demo-app
 
 NAME: spiffe-demo
-LAST DEPLOYED: Wed May 24 10:34:58 2023
+LAST DEPLOYED: Wed May 24 10:34:58 2024
 NAMESPACE: default
 STATUS: deployed
 REVISION: 1
@@ -46,7 +46,7 @@ That will install the app in the `default` namespace. If you want to install to 
 $ helm install spiffe-demo spiffe-demo/spiffe-demo-app --namespace foo --create-namespace
 
 NAME: spiffe-demo
-LAST DEPLOYED: Wed May 24 10:39:28 2023
+LAST DEPLOYED: Wed May 24 10:39:28 2024
 NAMESPACE: foo
 STATUS: deployed
 REVISION: 1
