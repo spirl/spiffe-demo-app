@@ -21,6 +21,9 @@ spec:
       - name: spiffe-demo-app
         image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- if .Values.app.healthCheckOnly }}
+        args: ["--health-check-only"]
+        {{- end }}
         {{- if not .Values.app.spiffeCSIDriverInjectionEnabled }}
         env:
           - name: SPIFFE_ENDPOINT_SOCKET
