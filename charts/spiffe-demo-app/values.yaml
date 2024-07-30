@@ -6,7 +6,7 @@ image:
   # -- The repository within the registry
   repository: elinesterov/spiffe-demo-app
   # -- The image tag to pull
-  tag: v0.2.2
+  tag: v0.3.0
   # -- The image pull policy
   pullPolicy: IfNotPresent
 
@@ -32,6 +32,8 @@ app:
   spiffeCSIDriverVolume: false
   # -- Enable busybox container
   enableBusybox: false
+  # -- Enable health check only mode
+  healthCheckOnly: false
 
 # -- SPIFFE CSI driver support
 spiffeCSIDriver:
