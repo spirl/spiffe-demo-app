@@ -1,0 +1,104 @@
+body,
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10vh;
+  height: 100%;
+}
+
+#content>* {
+  margin: 10px 0;
+}
+
+#output-container {
+  max-width: 80vw;
+  width: 100%;
+}
+
+#output {
+  margin-top: 20px;
+  overflow-y: auto;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 5px;
+  background-color: #297fff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0062cc;
+}
+
+button:active {
+  background-color: #297fff;
+}
+
+button:focus {
+  outline: none;
+}
+
+input[type="text"],
+textarea {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+textarea {
+  resize: none;
+}
+
+#parsed-cert {
+  display: flex;
+  justify-content: space-between;
+  /* Added to create space between columns */
+  width: 100%;
+}
+
+#parsed-cert>div {
+  width: calc(50% - 10px);
+  /* Added to set the width of the columns */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+#parsed-cert>div h3 {
+  margin-top: 0;
+}
+
+#parsed-cert>table {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  border-spacing: 0px;
+}
+
+#parsed-cert>table td,
+#parsed-cert>table th {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.token {
+  font-family: monospace;
+  font-size: 14px;
+  padding: 10px;
+  overflow-y: auto;
+}
