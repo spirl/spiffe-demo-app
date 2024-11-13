@@ -1,2 +1,30 @@
 # Dev machine artifacts
 .DS_Store
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Binaries built using the makefile targets
+/bin/
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# direnv + nix cache
+/.direnv/
+
+# IDE artifacts
+*.swp
+.vscode/
+
+*un~

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>SPIFFE Helper App</title>
+  <link rel="stylesheet" href="/kodata/styles.css">
+  <script type="module"
+    src="https://cdn.jsdelivr.net/npm/@peculiar/certificates-viewer/dist/peculiar/peculiar.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/@peculiar/certificates-viewer/dist/peculiar/peculiar.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@peculiar/certificates-viewer/dist/peculiar/peculiar.css">
+</head>
+
+<body>
+  <div id="content">
+    <div style="text-align:center;">
+      <button id="getJwtButton">Show JWT-SVID</button>
+      <button id="getX509Button">Show X509-SVID</button>
+      <button id="getX509TrustBundleButton">Show X.509 Trust Bundle</button>
+      <button id="getJwtTrustBundleButton">Show JWT Trust Bundle</button>
+    </div>
+    <div class="center" id="output-container">
+      <div id="output"></div>
+      <div id="parsed-cert"></div>
+    </div>
+  </div>
+  <script src="/kodata/index.js"></script>
+</body>
+
+</html>

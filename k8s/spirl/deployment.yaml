@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: spiffe-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spiffe-demo-app
+  namespace: spiffe-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spiffe-demo-app
+  template:
+    metadata:
+      labels:
+        app: spiffe-demo-app
+    spec:
+      containers:
+      - name: spiffe-demo-app
+        image: ko.local/github.com/spirl/spiffe-demo-app:latest
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: SPIFFE_ENDPOINT_SOCKET
+            value: "unix:///spiffe-workload-api/agent.sock"
+        volumeMounts:
+        - name: spirl-agent-socket-dir
+          mountPath: /spiffe-workload-api
+          readOnly: false
+        ports:
+        - containerPort: 8080
+      - name: busybox
+        image: busybox
+        command: ['sleep', '3600']
+        env:
+          - name: SPIFFE_ENDPOINT_SOCKET
+            value: "unix:///spiffe-workload-api/agent.sock"
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - name: spirl-agent-socket-dir
+            mountPath: /spiffe-workload-api
+            readOnly: true
+      volumes:
+      - name: spirl-agent-socket-dir
+        csi:
+          driver: "csi.spiffe.io"
+          readOnly: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spiffe-demo-app-service
+  namespace: spiffe-demo
+spec:
+  selector:
+    app: spiffe-demo-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
