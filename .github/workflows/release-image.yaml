@@ -5,6 +5,10 @@ on:
     tags:
       - v*
 
+permissions:
+  contents: read
+  packages: write # Needed for pushing the image to the registry
+      
 jobs:
   build:
     runs-on: ubuntu-latest
