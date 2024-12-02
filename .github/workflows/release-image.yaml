@@ -1,10 +1,14 @@
-name: Build, Push and Release the image
+name: Build and Release the image
 
 on:
   push:
     tags:
       - v*
 
+permissions:
+  contents: read
+  packages: write # Needed for pushing the image to the registry
+      
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,13 +21,13 @@ jobs:
         with:
           go-version: '1.20.x'
 
-      - name: build and push
+      - name: setup ko
         uses: ko-build/setup-ko@ace48d793556083a76f1e3e6068850c1f4a369aa # v0.6
       
-      - name: release
+      - name: build and push
         run: |
           tag=$(echo ${{ github.ref }} | cut -c11-)  # get tag name without tags/refs/ prefix.
-          KO_DOCKER_REPO=ghcr.io/elinesterov/spiffe-demo-app \
+          KO_DOCKER_REPO=ghcr.io/spirl/spiffe-demo-app \
           ko build \
             --tags $tag \
             --tag-only \
