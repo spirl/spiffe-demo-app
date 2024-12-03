@@ -4,9 +4,9 @@ image:
   # -- The OCI registry to pull the image from
   registry: ghcr.io
   # -- The repository within the registry
-  repository: elinesterov/spiffe-demo-app
+  repository: spirl/spiffe-demo-app
   # -- The image tag to pull
-  tag: v0.3.0
+  tag: v0.3.2
   # -- The image pull policy
   pullPolicy: IfNotPresent
 
