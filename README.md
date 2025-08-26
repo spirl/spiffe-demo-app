@@ -156,7 +156,7 @@ spiffe-demo-app deployemnt that is disabled by default. In order to enable it
 you can add `--set app.enableBusybox=true` when installing `spiffe-demo-app`
 helm chart.
 
-### 7. Cleaning up
+### 6. Cleaning up
 
 Cleaning up is simple:
 
