@@ -60,3 +60,20 @@ spec:
           driver: "csi.spiffe.io"
           readOnly: true
       {{- end }}
+      {{- if .Values.app.enableDebug }}
+      - name: spirldbg
+        image: {{ .Values.spirldbg.registry }}/{{ .Values.spirldbg.repository }}:{{ .Values.spirldbg.tag }}
+        command: ['sh', '-c', 'sleep 3600']
+        {{- if not .Values.app.spiffeCSIDriverInjectionEnabled }}
+        env:
+          - name: SPIFFE_ENDPOINT_SOCKET
+            value: "unix://{{ .Values.app.spiffeSocketMountPathDir }}/{{ .Values.app.spiffeSocketName }}"
+        {{- end }}
+        imagePullPolicy: {{ .Values.spirldbg.pullPolicy }}
+        {{- if .Values.app.spiffeCSIDriverVolume }}
+        volumeMounts:
+          - name: spiffe-csi-driver-volume
+            mountPath: {{ .Values.app.spiffeSocketMountPathDir }}
+            readOnly: true
+        {{- end }}
+      {{- end }}
