@@ -138,9 +138,23 @@ Forwarding from [::1]:8080 -> 8080
 
 Now you can point your browser to [http://localhost:8080](http://localhost:8080) to connect to the frontend. Clock buttons to see JWT-SVID, X509-SVID and expore SPIFFE Trust Bundle in a very simple way.
 
-### 5. Using busybox for troubleshooting
+### 5. Troubleshooting
 
-Sometimes you need to run a few simple shell commands to list mounted agent socket content or for any other reason. We have `busybox` container withtin the spiffe-demo-app deployemnt that is disabled by default. In order to enable it you can add `--set app.enableBusybox=true` when installing `spiffe-demo-app` helm chart.
+You can enable [`spirldbg`](https://d.spirl.com/spirlctl/spirlcli-spirldbg) when
+installing the `spiffe-demo-app` helm chart by adding `--set app.enableDebug=true`,
+like so:
+
+```shell
+$ helm install spiffe-demo spiffe-demo/spiffe-demo-app --namespace foo --set app.enableDebug=true --create-namespace
+```
+
+The container will be named `spirldbg`.
+
+Sometimes you need to run a few simple shell commands to list mounted agent
+socket content or for any other reason. We have `busybox` container withtin the
+spiffe-demo-app deployemnt that is disabled by default. In order to enable it
+you can add `--set app.enableBusybox=true` when installing `spiffe-demo-app`
+helm chart.
 
 ### 6. Cleaning up
 

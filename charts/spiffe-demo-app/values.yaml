@@ -13,6 +13,12 @@ image:
 # -- Image used for busybox when enabled
 busyboxImage: busybox
 
+spirldbg:
+  registry: ghcr.io
+  repository: spirl/spirldbg
+  tag: latest
+  pullPolicy: IfNotPresent
+
 # -- The service type to use
 service:
   type: LoadBalancer
@@ -34,6 +40,8 @@ app:
   enableBusybox: false
   # -- Enable health check only mode
   healthCheckOnly: false
+  # -- Enable spirldbg
+  enableDebug: false
 
 # -- SPIFFE CSI driver support
 spiffeCSIDriver:
