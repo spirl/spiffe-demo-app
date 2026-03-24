@@ -45,10 +45,33 @@ getJwtButton.addEventListener('click', async () => {
     const decodedHeader = document.createElement('h3');
     decodedHeader.textContent = 'Decoded';
 
+    const base64UrlDecode = (str) => {
+      // Replace base64url chars and pad to a multiple of 4
+      const base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = base64.padEnd(base64.length + (4 - base64.length % 4) % 4, '=');
+      return atob(padded);
+    };
+
+    const headerLabel = document.createElement('h4');
+    headerLabel.textContent = 'Header';
+    headerLabel.style.marginBottom = '4px';
+
+    const headerText = document.createElement('pre');
+    headerText.classList.add('token');
+    headerText.textContent = JSON.stringify(JSON.parse(base64UrlDecode(token.split('.')[0])), null, 2);
+
+    const payloadLabel = document.createElement('h4');
+    payloadLabel.textContent = 'Payload';
+    payloadLabel.style.marginBottom = '4px';
+
     const decodedText = document.createElement('pre');
     decodedText.classList.add('token');
-    decodedText.textContent = JSON.stringify(JSON.parse(atob(token.split('.')[1])), null, 2);
+    decodedText.textContent = JSON.stringify(JSON.parse(base64UrlDecode(token.split('.')[1])), null, 2);
+
     decodedContainer.appendChild(decodedHeader);
+    decodedContainer.appendChild(headerLabel);
+    decodedContainer.appendChild(headerText);
+    decodedContainer.appendChild(payloadLabel);
     decodedContainer.appendChild(decodedText);
 
     // Add both columns to parsed-cert element
