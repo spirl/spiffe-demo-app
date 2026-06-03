@@ -6,7 +6,7 @@ image:
   # -- The repository within the registry
   repository: spirl/spiffe-demo-app
   # -- The image tag to pull
-  tag: v0.3.2
+  tag: v0.3.3
   # -- The image pull policy
   pullPolicy: IfNotPresent
 
