@@ -74,6 +74,23 @@ Now you can point your browser to [http://localhost:8080](http://localhost:8080)
 > helm delete spiffe-demo
 ```
 
+## Hardened clusters (PodSecurity "restricted" / GKE Autopilot)
+
+The chart's default render is compliant with the PodSecurity "restricted"
+profile (Kubernetes 1.25+), so the app pod is admitted into namespaces labeled
+`pod-security.kubernetes.io/enforce: restricted`, including GKE Autopilot. The
+app Deployment sets a pod-level and per-container `securityContext`; you can tune
+or disable it via the `podSecurityContext`, `securityContext`, and
+`spirldbgSecurityContext` values (see [chart values](charts/spiffe-demo-app/README.md)).
+
+One important caveat: `spiffeCSIDriver.enabled=true` renders a privileged
+DaemonSet (hostPath mounts, bidirectional mount propagation) that CSI node
+drivers genuinely require. It CANNOT satisfy "restricted" and will be rejected by
+PodSecurity admission and by GKE Autopilot. Do not enable it in a restricted
+namespace. Run it in a separate privileged/baseline namespace, or use the managed
+SPIRL injection path instead. The app Deployment itself remains
+restricted-compliant.
+
 ## Example of using with SPIRE Helm Chart
 
 SPIFFE community support SPIRE Helm Chart which provides a way to install SPIRE in k8s cluster for a quick start.

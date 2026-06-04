@@ -82,6 +82,14 @@ app:
   enableDebug: false
 
 # -- SPIFFE CSI driver support
+# WARNING: when enabled this renders a DaemonSet that is privileged, uses
+# hostPath mounts with Bidirectional mount propagation, and has no pod
+# securityContext. CSI node drivers genuinely require this privilege, so the
+# DaemonSet CANNOT satisfy PodSecurity "restricted" and will be rejected by PSA
+# admission (and by GKE Autopilot outright). Do not enable it in a namespace
+# labeled pod-security.kubernetes.io/enforce: restricted. Run it in a separate
+# privileged/baseline namespace, or use the managed SPIRL injection path. The app
+# Deployment itself (default render, with this disabled) is restricted-compliant.
 spiffeCSIDriver:
   # -- Enable/disable SPIFFE CSI driver support
   enabled: false
