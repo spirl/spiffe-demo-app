@@ -21,7 +21,16 @@ spirldbg:
   tag: v0.0.18
   pullPolicy: IfNotPresent
 
-# -- Pod-level security context. Defaults satisfy PodSecurity "restricted".
+# -- PodSecurity hardening. OFF by default: the rendered pod is unchanged from
+# previous chart versions. Set podSecurity.restricted=true to apply the
+# securityContext blocks below and make the app pod compliant with the
+# PodSecurity "restricted" profile (required for namespaces labeled
+# pod-security.kubernetes.io/enforce: restricted, e.g. GKE Autopilot).
+podSecurity:
+  # -- Apply the restricted-compliant securityContext blocks below.
+  restricted: false
+
+# -- Pod-level security context, applied only when podSecurity.restricted=true.
 # The app image runs as the nonroot UID 65532; runAsUser is pinned to match it.
 # WARNING: this whole map is a single override target. Setting it to {} (or a
 # partial map) replaces the entire securityContext and drops "restricted"
@@ -34,8 +43,8 @@ podSecurityContext:
   seccompProfile:
     type: RuntimeDefault
 
-# -- Container-level security context for the app and busybox containers.
-# Defaults satisfy PodSecurity "restricted".
+# -- Container-level security context for the app and busybox containers,
+# applied only when podSecurity.restricted=true.
 # WARNING: this whole map is a single override target. Setting it to {} (or a
 # partial map) drops "restricted" compliance.
 securityContext:
@@ -44,7 +53,8 @@ securityContext:
     drop: ["ALL"]
   readOnlyRootFilesystem: true
 
-# -- Container-level security context for the spirldbg debug sidecar.
+# -- Container-level security context for the spirldbg debug sidecar, applied
+# only when podSecurity.restricted=true.
 # The spirldbg image runs as root, so runAsNonRoot/runAsUser are set here to
 # override the pod-level context and keep the pod "restricted"-compliant. The
 # root filesystem is left writable so the debug shell can create temp files.

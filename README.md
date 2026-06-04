@@ -76,11 +76,18 @@ Now you can point your browser to [http://localhost:8080](http://localhost:8080)
 
 ## Hardened clusters (PodSecurity "restricted" / GKE Autopilot)
 
-The chart's default render is compliant with the PodSecurity "restricted"
-profile (Kubernetes 1.25+), so the app pod is admitted into namespaces labeled
-`pod-security.kubernetes.io/enforce: restricted`, including GKE Autopilot. The
-app Deployment sets a pod-level and per-container `securityContext`; you can tune
-or disable it via the `podSecurityContext`, `securityContext`, and
+The chart can render the app pod compliant with the PodSecurity "restricted"
+profile (Kubernetes 1.25+), so it is admitted into namespaces labeled
+`pod-security.kubernetes.io/enforce: restricted`, including GKE Autopilot. This
+is **off by default** (the rendered pod is unchanged from earlier chart
+versions); enable it with:
+
+```bash
+helm install spiffe-demo spiffe-demo/spiffe-demo-app --set podSecurity.restricted=true
+```
+
+When enabled, the Deployment sets a pod-level and per-container `securityContext`;
+you can tune them via the `podSecurityContext`, `securityContext`, and
 `spirldbgSecurityContext` values (see [chart values](charts/spiffe-demo-app/README.md)).
 
 One important caveat: `spiffeCSIDriver.enabled=true` renders a privileged
