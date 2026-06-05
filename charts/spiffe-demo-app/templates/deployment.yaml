@@ -17,10 +17,18 @@ spec:
         {{- end }}
     spec:
       serviceAccountName: {{ .Release.Name }}-app
+      {{- if and .Values.podSecurity.restricted .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- end }}
       containers:
       - name: spiffe-demo-app
         image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- if and .Values.podSecurity.restricted .Values.securityContext }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
         {{- if .Values.app.healthCheckOnly }}
         args: ["--health-check-only"]
         {{- end }}
@@ -46,6 +54,31 @@ spec:
             value: "unix://{{ .Values.app.spiffeSocketMountPathDir }}/{{ .Values.app.spiffeSocketName }}"
         {{- end }}
         imagePullPolicy: IfNotPresent
+        {{- if and .Values.podSecurity.restricted .Values.securityContext }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        {{- end }}
+        {{- if .Values.app.spiffeCSIDriverVolume }}
+        volumeMounts:
+          - name: spiffe-csi-driver-volume
+            mountPath: {{ .Values.app.spiffeSocketMountPathDir }}
+            readOnly: true
+        {{- end }}
+      {{- end }}
+      {{- if .Values.app.enableDebug }}
+      - name: spirldbg
+        image: {{ .Values.spirldbg.registry }}/{{ .Values.spirldbg.repository }}:{{ .Values.spirldbg.tag }}
+        command: ['sh', '-c', 'sleep 3600']
+        {{- if not .Values.app.spiffeCSIDriverInjectionEnabled }}
+        env:
+          - name: SPIFFE_ENDPOINT_SOCKET
+            value: "unix://{{ .Values.app.spiffeSocketMountPathDir }}/{{ .Values.app.spiffeSocketName }}"
+        {{- end }}
+        imagePullPolicy: {{ .Values.spirldbg.pullPolicy }}
+        {{- if and .Values.podSecurity.restricted .Values.spirldbgSecurityContext }}
+        securityContext:
+          {{- toYaml .Values.spirldbgSecurityContext | nindent 10 }}
+        {{- end }}
         {{- if .Values.app.spiffeCSIDriverVolume }}
         volumeMounts:
           - name: spiffe-csi-driver-volume
@@ -59,21 +92,4 @@ spec:
         csi:
           driver: "csi.spiffe.io"
           readOnly: true
-      {{- end }}
-      {{- if .Values.app.enableDebug }}
-      - name: spirldbg
-        image: {{ .Values.spirldbg.registry }}/{{ .Values.spirldbg.repository }}:{{ .Values.spirldbg.tag }}
-        command: ['sh', '-c', 'sleep 3600']
-        {{- if not .Values.app.spiffeCSIDriverInjectionEnabled }}
-        env:
-          - name: SPIFFE_ENDPOINT_SOCKET
-            value: "unix://{{ .Values.app.spiffeSocketMountPathDir }}/{{ .Values.app.spiffeSocketName }}"
-        {{- end }}
-        imagePullPolicy: {{ .Values.spirldbg.pullPolicy }}
-        {{- if .Values.app.spiffeCSIDriverVolume }}
-        volumeMounts:
-          - name: spiffe-csi-driver-volume
-            mountPath: {{ .Values.app.spiffeSocketMountPathDir }}
-            readOnly: true
-        {{- end }}
       {{- end }}

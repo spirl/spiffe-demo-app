@@ -16,8 +16,56 @@ busyboxImage: busybox
 spirldbg:
   registry: ghcr.io
   repository: spirl/spirldbg
-  tag: latest
+  # -- Pinned to a released tag. ":latest" is mutable and resolves to an old
+  # build carrying CVEs. Bump deliberately.
+  tag: v0.0.18
   pullPolicy: IfNotPresent
+
+# -- PodSecurity hardening. OFF by default: the rendered pod is unchanged from
+# previous chart versions. Set podSecurity.restricted=true to apply the
+# securityContext blocks below and make the app pod compliant with the
+# PodSecurity "restricted" profile (required for namespaces labeled
+# pod-security.kubernetes.io/enforce: restricted, e.g. GKE Autopilot).
+podSecurity:
+  # -- Apply the restricted-compliant securityContext blocks below.
+  restricted: false
+
+# -- Pod-level security context, applied only when podSecurity.restricted=true.
+# The app image runs as the nonroot UID 65532; runAsUser is pinned to match it.
+# WARNING: this whole map is a single override target. Setting it to {} (or a
+# partial map) replaces the entire securityContext and drops "restricted"
+# compliance. "restricted" only requires runAsNonRoot, not a specific UID, so if
+# you override image.tag with an image using a different nonroot UID, update
+# runAsUser to match (or drop it and rely on the image's own USER).
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  seccompProfile:
+    type: RuntimeDefault
+
+# -- Container-level security context for the app and busybox containers,
+# applied only when podSecurity.restricted=true.
+# WARNING: this whole map is a single override target. Setting it to {} (or a
+# partial map) drops "restricted" compliance.
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  readOnlyRootFilesystem: true
+
+# -- Container-level security context for the spirldbg debug sidecar, applied
+# only when podSecurity.restricted=true.
+# The spirldbg image runs as root, so runAsNonRoot/runAsUser are set here to
+# override the pod-level context and keep the pod "restricted"-compliant. The
+# root filesystem is left writable so the debug shell can create temp files.
+# NOTE: spirldbg's native tooling may need privileges; the chart's default debug
+# usage (an exec-in shell) works as nonroot.
+spirldbgSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
 
 # -- The service type to use
 service:
@@ -44,6 +92,14 @@ app:
   enableDebug: false
 
 # -- SPIFFE CSI driver support
+# WARNING: when enabled this renders a DaemonSet that is privileged, uses
+# hostPath mounts with Bidirectional mount propagation, and has no pod
+# securityContext. CSI node drivers genuinely require this privilege, so the
+# DaemonSet CANNOT satisfy PodSecurity "restricted" and will be rejected by PSA
+# admission (and by GKE Autopilot outright). Do not enable it in a namespace
+# labeled pod-security.kubernetes.io/enforce: restricted. Run it in a separate
+# privileged/baseline namespace, or use the managed SPIRL injection path. The app
+# Deployment itself (default render, with this disabled) is restricted-compliant.
 spiffeCSIDriver:
   # -- Enable/disable SPIFFE CSI driver support
   enabled: false
