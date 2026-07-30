@@ -42,7 +42,8 @@ The image tag equals the git tag verbatim (e.g. tag `v0.3.3` gives image
 vX.Y.Z`).
 
 ### Notes
-- The image workflow uses Go `1.25.x` (`go.mod` requires `go 1.25.9`).
+- The image workflow reads its Go version from `go.mod` (`go-version-file`), so
+  bumping the `go` directive is enough; there is no second version to update.
 - GHCR auth is automatic: `ko-build/setup-ko` logs in with the workflow
   `GITHUB_TOKEN` (the job grants `packages: write`).
 
