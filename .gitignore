@@ -26,5 +26,6 @@
 # IDE artifacts
 *.swp
 .vscode/
+.idea/
 
 *un~

@@ -1,0 +1,189 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":semanticCommitsDisabled"
+  ],
+  "prBodyTemplate": "<!--aviator_cut_after_this_mark-->\n{{{header}}}{{{table}}}{{{warnings}}}{{{notes}}}{{{changelogs}}}{{{configDescription}}}{{{controls}}}{{{footer}}}",
+  "prBodyColumns": [
+    "Package",
+    "Type",
+    "Update",
+    "Change",
+    "Age",
+    "Confidence"
+  ],
+  "postUpdateOptions": [
+    "gomodTidy",
+    "helmUpdateSubChartArchives"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "rebaseWhen": "conflicted",
+  "internalChecksFilter": "strict",
+  "github-actions": {
+    "pinDigests": true
+  },
+  "minimumReleaseAge": "14 days",
+  "osvVulnerabilityAlerts": true,
+  "transitiveRemediation": true,
+  "vulnerabilityAlerts": {
+    "minimumReleaseAge": null,
+    "groupName": null,
+    "schedule": []
+  },
+  "packageRules": [
+    {
+      "description": "Enable updates for indirect Go module dependencies",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchDepTypes": [
+        "indirect"
+      ],
+      "enabled": true
+    },
+    {
+      "description": "Disable major updates for indirect Go module dependencies; the major version is part of the import path, which only the direct importer can change",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchDepTypes": [
+        "indirect"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Group all Go module minor/patch dependency updates into a weekly batch",
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "go-dependencies",
+      "schedule": [
+        "* 8 * * 1"
+      ]
+    },
+    {
+      "description": "Group all Docker image minor/patch updates into a weekly batch",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "docker-dependencies",
+      "schedule": [
+        "* 8 * * 1"
+      ]
+    },
+    {
+      "description": "Group all npm/pnpm minor/patch dependency updates into a weekly batch",
+      "matchManagers": [
+        "npm"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "pnpm-dependencies",
+      "schedule": [
+        "* 8 * * 1"
+      ]
+    },
+    {
+      "description": "Group all Bazel/MODULE.bazel minor/patch dependency updates into a weekly batch",
+      "matchManagers": [
+        "bazel",
+        "bazel-module"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "bazel-dependencies",
+      "schedule": [
+        "* 8 * * 1"
+      ]
+    },
+    {
+      "description": [
+        "Enable automatic Go version updates in go.mod"
+      ],
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchDepNames": [
+        "go"
+      ],
+      "matchDepTypes": [
+        "golang"
+      ],
+      "rangeStrategy": "bump",
+      "groupName": "go-version"
+    },
+    {
+      "description": [
+        "Group Go version updates in mise.toml with go.mod updates"
+      ],
+      "matchManagers": [
+        "mise"
+      ],
+      "matchDepNames": [
+        "go"
+      ],
+      "groupName": "go-version"
+    },
+    {
+      "description": [
+        "Group all the pulumi packages together"
+      ],
+      "matchPackageNames": [
+        "/github.com/pulumi/pulumi.*/i"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "pulumi packages"
+    },
+    {
+      "description": [
+        "Slow down digest updates, which are frequent"
+      ],
+      "matchUpdateTypes": [
+        "digest"
+      ],
+      "extends": [
+        "schedule:weekly"
+      ]
+    },
+    {
+      "description": "Mise releases almost daily, only check for mise updates weekly",
+      "matchDatasources": [
+        "github-releases"
+      ],
+      "matchDepNames": [
+        "jdx/mise"
+      ],
+      "extends": [
+        "schedule:weekly"
+      ]
+    },
+    {
+      "description": "Prefer full semver tags (e.g. v9.0.0 over v9) for GitHub Actions",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "versioning": "semver"
+    }
+  ]
+}

@@ -32,7 +32,7 @@ spec:
         ports:
         - containerPort: 8080
       - name: busybox
-        image: busybox
+        image: busybox:1.38.0
         env:
           - name: SPIFFE_ENDPOINT_SOCKET
             value: "unix:///spiffe-workload-api/spire-agent.sock"

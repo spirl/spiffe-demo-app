@@ -10,8 +10,9 @@ image:
   # -- The image pull policy
   pullPolicy: IfNotPresent
 
-# -- Image used for busybox when enabled
-busyboxImage: busybox
+# -- Image used for busybox when enabled. Pinned to a release tag; ":latest"
+# is mutable. Bump deliberately when updating.
+busyboxImage: busybox:1.38.0
 
 spirldbg:
   registry: ghcr.io
