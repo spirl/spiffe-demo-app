@@ -1,6 +1,48 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "github>spirl/infra//renovate/shared"
+  ],
+  "packageRules": [
+    {
+      "description": "This repo's own image. Its version line is driven by hand and sequenced against the chart (see RELEASING.md), so Renovate must not bump it.",
+      "matchPackageNames": [
+        "/(^|/)spiffe-demo-app$/"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Automerge updates that CI actually exercises and that cannot publish an artifact on merge.",
+      "matchManagers": [
+        "gomod",
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest",
+        "pin",
+        "pinDigest"
+      ],
+      "automerge": true
+    },
+    {
+      "description": "Actions used only by the release workflows. CI never runs them, so a bad bump would surface mid-release. Review by hand.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "helm/chart-releaser-action",
+        "ko-build/setup-ko"
+      ],
+      "automerge": false
+    },
+    {
+      "description": "A push to main touching charts/** publishes the chart via release.yml, and chart-releaser silently no-ops when Chart.yaml version is unchanged. Never automerge here.",
+      "matchFileNames": [
+        "charts/**"
+      ],
+      "automerge": false
+    }
   ]
 }

@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+# Renovate rebases its branches; don't pay for runs nobody will read.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Set up Go
+        uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          # Read the version from go.mod so a Renovate go.mod bump is exercised
+          # here rather than surfacing for the first time during a release.
+          go-version-file: go.mod
+
+      - name: Build
+        run: go build ./...
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test
+        run: go test ./...
+
+      - name: Install Helm
+        uses: azure/setup-helm@5119fcb9089d432beecbf79bb2c7915207344b78 # v3.5
+
+      - name: Lint chart
+        run: helm lint --strict charts/spiffe-demo-app
+
+      - name: Render chart (defaults)
+        run: helm template ci charts/spiffe-demo-app > /dev/null
+
+      - name: Render chart (all toggles on)
+        # The default render references only image.tag. busybox, spirldbg and the
+        # CSI driver are all off by default, so without this every value Renovate
+        # touches in values.yaml would go unrendered and the lint above would
+        # prove nothing about it.
+        run: |
+          helm template ci charts/spiffe-demo-app \
+            --set podSecurity.restricted=true \
+            --set app.enableBusybox=true \
+            --set app.enableDebug=true \
+            --set app.spiffeCSIDriverVolume=true \
+            --set spiffeCSIDriver.enabled=true \
+            > /dev/null

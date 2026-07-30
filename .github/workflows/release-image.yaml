@@ -19,7 +19,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
         with:
-          go-version: '1.25.x'
+          # Track go.mod rather than a hardcoded pin, so an automerged Renovate
+          # Go bump can't leave the release build on a stale version.
+          go-version-file: go.mod
 
       - name: setup ko
         uses: ko-build/setup-ko@d006021bd0c28d1ce33a07e7943d48b079944c8d # v0.9
