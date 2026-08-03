@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "local>spirl/spiffe-demo-app:shared-renovate"
+    "github>spirl/infra//renovate/shared"
   ],
   "packageRules": [
     {
