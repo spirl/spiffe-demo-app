@@ -72,6 +72,17 @@ If a chart release is meant to adopt a new image, **publish the image first**
 (so `ghcr.io/spirl/spiffe-demo-app:vX.Y.Z` exists), then point the chart at it.
 Otherwise the chart references a tag that isn't in the registry yet.
 
+### Renovate PRs that touch the chart
+Renovate tracks the two third-party images pinned in
+`charts/spiffe-demo-app/templates/spiffe-csi-driver.yaml` (`spiffe-csi-driver`
+and `csi-node-driver-registrar`), so it can open PRs against `charts/**` on its
+own. Those PRs bump only the image tag — they do **not** bump `Chart.yaml`.
+
+Merging one as-is changes the chart in git but publishes nothing, because
+chart-releaser dedupes by version (step 1 above). Before merging a Renovate PR
+that touches `charts/**`, add a `Chart.yaml` version bump to it. Renovate is
+configured never to automerge these, so there is always a chance to do so.
+
 ---
 
 ## End-to-end: shipping an app change

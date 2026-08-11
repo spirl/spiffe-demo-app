@@ -3,11 +3,31 @@
   "extends": [
     "github>spirl/infra//renovate/shared"
   ],
+  "kubernetes": {
+    "description": [
+      "The kubernetes manager has no default file pattern, so images in plain manifests are invisible to Renovate unless the files are named here. Without this, spiffe-csi-driver and csi-node-driver-registrar went unupgraded for two years (FARN-225).",
+      "charts/**/templates/spiffe-csi-driver.yaml is listed explicitly rather than globbing the templates directory: the CSI DaemonSet hardcodes its two image tags, whereas the other templates build image refs out of Go template expressions that Renovate cannot parse."
+    ],
+    "managerFilePatterns": [
+      "/^k8s/.+\\.yaml$/",
+      "/^charts/spiffe-demo-app/templates/spiffe-csi-driver\\.yaml$/"
+    ]
+  },
   "packageRules": [
     {
       "description": "This repo's own image. Its version line is driven by hand and sequenced against the chart (see RELEASING.md), so Renovate must not bump it.",
       "matchPackageNames": [
         "/(^|/)spiffe-demo-app$/"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Not a real image. k8s/spire/deployment.yaml uses a ko build directive, \"ko://github.com/spirl/spiffe-demo-app\", which the kubernetes manager parses down to a bare \"ko\" package with no version. Nothing can be resolved from it, so disable it rather than let it accumulate lookup failures on the dependency dashboard.",
+      "matchManagers": [
+        "kubernetes"
+      ],
+      "matchPackageNames": [
+        "ko"
       ],
       "enabled": false
     },
