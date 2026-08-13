@@ -3,27 +3,11 @@
   "extends": [
     "github>spirl/infra//renovate/shared"
   ],
-  "kubernetes": {
-    "description": "This manager has no default file pattern, so k8s/ is untracked unless named here. Chart images are not covered: they live in values.yaml, which helm-values reads.",
-    "managerFilePatterns": [
-      "/^k8s/.+\\.yaml$/"
-    ]
-  },
   "packageRules": [
     {
       "description": "This repo's own image. Its version line is driven by hand and sequenced against the chart (see RELEASING.md), so Renovate must not bump it.",
       "matchPackageNames": [
         "/(^|/)spiffe-demo-app$/"
-      ],
-      "enabled": false
-    },
-    {
-      "description": "Not a real image. The \"ko://\" build directive in k8s/spire/deployment.yaml parses down to a bare \"ko\" package with no version.",
-      "matchManagers": [
-        "kubernetes"
-      ],
-      "matchPackageNames": [
-        "ko"
       ],
       "enabled": false
     },
