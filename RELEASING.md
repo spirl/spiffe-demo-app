@@ -72,6 +72,15 @@ If a chart release is meant to adopt a new image, **publish the image first**
 (so `ghcr.io/spirl/spiffe-demo-app:vX.Y.Z` exists), then point the chart at it.
 Otherwise the chart references a tag that isn't in the registry yet.
 
+### Renovate PRs that touch the chart
+Declare every image in `values.yaml` under a key ending in `image` — that is what
+Renovate's `helm-values` manager matches. A tag hardcoded in `templates/` is
+invisible to it.
+
+Renovate bumps the tag but not `Chart.yaml`, and chart-releaser dedupes by
+version (step 1 above), so merging as-is publishes nothing. Add a `Chart.yaml`
+bump before merging. These never automerge.
+
 ---
 
 ## End-to-end: shipping an app change

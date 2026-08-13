@@ -1,6 +1,6 @@
 # spiffe-demo-app
 
-![Version: 0.4.4](https://img.shields.io/badge/Version-0.4.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 A Helm chart to install spiffe-demo-app
 
@@ -25,12 +25,12 @@ A Helm chart to install spiffe-demo-app
 | podSecurityContext | object | `{"runAsNonRoot":true,"runAsUser":65532,"seccompProfile":{"type":"RuntimeDefault"}}` | Pod-level security context, applied only when podSecurity.restricted=true. |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}` | Container-level security context for the app and busybox containers, applied only when podSecurity.restricted=true. |
 | service | object | `{"port":80,"type":"LoadBalancer"}` | The service type to use |
-| spiffeCSIDriver | object | `{"enabled":false}` | SPIFFE CSI driver support |
+| spiffeCSIDriver | object | `{"enabled":false,"image":{"repository":"ghcr.io/spiffe/spiffe-csi-driver","tag":"0.2.3"},"nodeDriverRegistrarImage":{"repository":"registry.k8s.io/sig-storage/csi-node-driver-registrar","tag":"v2.6.0"}}` | SPIFFE CSI driver support |
 | spiffeCSIDriver.enabled | bool | `false` | Enable/disable SPIFFE CSI driver support |
-| spirldbg.pullPolicy | string | `"IfNotPresent"` |  |
-| spirldbg.registry | string | `"ghcr.io"` |  |
-| spirldbg.repository | string | `"spirl/spirldbg"` |  |
-| spirldbg.tag | string | `"v0.0.18"` | Pinned to a released tag. ":latest" is mutable and resolves to an old build carrying CVEs. Bump deliberately. |
+| spiffeCSIDriver.image | object | `{"repository":"ghcr.io/spiffe/spiffe-csi-driver","tag":"0.2.3"}` | The SPIFFE CSI driver image. |
+| spiffeCSIDriver.nodeDriverRegistrarImage | object | `{"repository":"registry.k8s.io/sig-storage/csi-node-driver-registrar","tag":"v2.6.0"}` | The node-driver-registrar sidecar image. |
+| spirldbg.image | object | `{"pullPolicy":"IfNotPresent","registry":"ghcr.io","repository":"spirl/spirldbg","tag":"v0.0.18"}` | The spirldbg debug sidecar image. Key ends in "image" so Renovate tracks it. |
+| spirldbg.image.tag | string | `"v0.0.18"` | Pinned to a released tag. ":latest" is mutable and resolves to an old build carrying CVEs. Bump deliberately. |
 | spirldbgSecurityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"runAsNonRoot":true,"runAsUser":65532}` | Container-level security context for the spirldbg debug sidecar, applied only when podSecurity.restricted=true. The spirldbg image runs as root, so runAsNonRoot/runAsUser override the pod-level context. Root filesystem left writable for debugging. |
 
 ----------------------------------------------
