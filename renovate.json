@@ -5,12 +5,11 @@
   ],
   "kubernetes": {
     "description": [
-      "The kubernetes manager has no default file pattern, so images in plain manifests are invisible to Renovate unless the files are named here. Without this, spiffe-csi-driver and csi-node-driver-registrar went unupgraded for two years (FARN-225).",
-      "charts/**/templates/spiffe-csi-driver.yaml is listed explicitly rather than globbing the templates directory: the CSI DaemonSet hardcodes its two image tags, whereas the other templates build image refs out of Go template expressions that Renovate cannot parse."
+      "The kubernetes manager has no default file pattern, so images in the raw manifests under k8s/ are invisible to Renovate unless the directory is named here. Without this, spiffe-csi-driver and csi-node-driver-registrar went unupgraded for two years (FARN-225).",
+      "This is the one place we depart from spirl/spirl, which configures no kubernetes manager at all and leaves its raw manifests untracked. Those are dev-only fixtures; ours are the demo's documented install path, so they have to stay current. Chart images are not covered here — they live in values.yaml and the built-in helm-values manager reads them."
     ],
     "managerFilePatterns": [
-      "/^k8s/.+\\.yaml$/",
-      "/^charts/spiffe-demo-app/templates/spiffe-csi-driver\\.yaml$/"
+      "/^k8s/.+\\.yaml$/"
     ]
   },
   "packageRules": [

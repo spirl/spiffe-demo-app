@@ -26,7 +26,7 @@ spec:
       serviceAccountName: spiffe-csi-driver
       containers:
         - name: spiffe-csi-driver
-          image: ghcr.io/spiffe/spiffe-csi-driver:0.2.3
+          image: {{ .Values.spiffeCSIDriver.image.registry }}/{{ .Values.spiffeCSIDriver.image.repository }}:{{ .Values.spiffeCSIDriver.image.tag }}
           imagePullPolicy: IfNotPresent
           args: [
             "-workload-api-socket-dir", "/spirl-agent-socket",
@@ -53,7 +53,7 @@ spec:
                 - all
             privileged: true
         - name: node-driver-registrar
-          image: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.6.0
+          image: {{ .Values.spiffeCSIDriver.nodeDriverRegistrarImage.registry }}/{{ .Values.spiffeCSIDriver.nodeDriverRegistrarImage.repository }}:{{ .Values.spiffeCSIDriver.nodeDriverRegistrarImage.tag }}
           imagePullPolicy: IfNotPresent
           args: [
             "-csi-address", "/spiffe-csi/csi.sock",

@@ -15,12 +15,16 @@ image:
 busyboxImage: busybox:1.38.0
 
 spirldbg:
-  registry: ghcr.io
-  repository: spirl/spirldbg
-  # -- Pinned to a released tag. ":latest" is mutable and resolves to an old
-  # build carrying CVEs. Bump deliberately.
-  tag: v0.0.18
-  pullPolicy: IfNotPresent
+  # -- The spirldbg debug sidecar image. Nested under an "image" key so
+  # Renovate's helm-values manager tracks it; the manager only recognises keys
+  # whose name ends in "image".
+  image:
+    registry: ghcr.io
+    repository: spirl/spirldbg
+    # -- Pinned to a released tag. ":latest" is mutable and resolves to an old
+    # build carrying CVEs. Bump deliberately.
+    tag: v0.0.18
+    pullPolicy: IfNotPresent
 
 # -- PodSecurity hardening. OFF by default: the rendered pod is unchanged from
 # previous chart versions. Set podSecurity.restricted=true to apply the
@@ -104,3 +108,14 @@ app:
 spiffeCSIDriver:
   # -- Enable/disable SPIFFE CSI driver support
   enabled: false
+  # -- The SPIFFE CSI driver image. Third-party and upgraded independently of
+  # this repo's own image, so it is tracked by Renovate.
+  image:
+    registry: ghcr.io
+    repository: spiffe/spiffe-csi-driver
+    tag: "0.2.3"
+  # -- The node-driver-registrar sidecar image, likewise third-party.
+  nodeDriverRegistrarImage:
+    registry: registry.k8s.io
+    repository: sig-storage/csi-node-driver-registrar
+    tag: v2.6.0
