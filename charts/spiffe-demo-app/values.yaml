@@ -15,9 +15,7 @@ image:
 busyboxImage: busybox:1.38.0
 
 spirldbg:
-  # -- The spirldbg debug sidecar image. Nested under an "image" key so
-  # Renovate's helm-values manager tracks it; the manager only recognises keys
-  # whose name ends in "image".
+  # -- The spirldbg debug sidecar image. Key ends in "image" so Renovate tracks it.
   image:
     registry: ghcr.io
     repository: spirl/spirldbg
@@ -108,13 +106,12 @@ app:
 spiffeCSIDriver:
   # -- Enable/disable SPIFFE CSI driver support
   enabled: false
-  # -- The SPIFFE CSI driver image. Third-party and upgraded independently of
-  # this repo's own image, so it is tracked by Renovate.
+  # -- The SPIFFE CSI driver image.
   image:
     registry: ghcr.io
     repository: spiffe/spiffe-csi-driver
     tag: "0.2.3"
-  # -- The node-driver-registrar sidecar image, likewise third-party.
+  # -- The node-driver-registrar sidecar image.
   nodeDriverRegistrarImage:
     registry: registry.k8s.io
     repository: sig-storage/csi-node-driver-registrar

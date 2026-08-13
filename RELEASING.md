@@ -73,20 +73,13 @@ If a chart release is meant to adopt a new image, **publish the image first**
 Otherwise the chart references a tag that isn't in the registry yet.
 
 ### Renovate PRs that touch the chart
-Every image the chart pulls is declared in `values.yaml` under a key ending in
-`image`, which is what Renovate's built-in `helm-values` manager looks for. That
-covers `busyboxImage`, `spirldbg.image`, `spiffeCSIDriver.image` and
-`spiffeCSIDriver.nodeDriverRegistrarImage`. If you add another image, follow the
-same naming or Renovate will silently ignore it. Keep tags out of
-`templates/` — a hardcoded tag there is invisible to this manager.
+Declare every image in `values.yaml` under a key ending in `image` — that is what
+Renovate's `helm-values` manager matches. A tag hardcoded in `templates/` is
+invisible to it.
 
-So Renovate can open PRs against `charts/**` on its own. Those PRs bump only the
-image tag — they do **not** bump `Chart.yaml`.
-
-Merging one as-is changes the chart in git but publishes nothing, because
-chart-releaser dedupes by version (step 1 above). Before merging a Renovate PR
-that touches `charts/**`, add a `Chart.yaml` version bump to it. Renovate is
-configured never to automerge these, so there is always a chance to do so.
+Renovate bumps the tag but not `Chart.yaml`, and chart-releaser dedupes by
+version (step 1 above), so merging as-is publishes nothing. Add a `Chart.yaml`
+bump before merging. These never automerge.
 
 ---
 

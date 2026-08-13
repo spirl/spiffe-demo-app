@@ -4,10 +4,7 @@
     "github>spirl/infra//renovate/shared"
   ],
   "kubernetes": {
-    "description": [
-      "The kubernetes manager has no default file pattern, so images in the raw manifests under k8s/ are invisible to Renovate unless the directory is named here. Without this, spiffe-csi-driver and csi-node-driver-registrar went unupgraded for two years (FARN-225).",
-      "This is the one place we depart from spirl/spirl, which configures no kubernetes manager at all and leaves its raw manifests untracked. Those are dev-only fixtures; ours are the demo's documented install path, so they have to stay current. Chart images are not covered here — they live in values.yaml and the built-in helm-values manager reads them."
-    ],
+    "description": "This manager has no default file pattern, so k8s/ is untracked unless named here. Chart images are not covered: they live in values.yaml, which helm-values reads.",
     "managerFilePatterns": [
       "/^k8s/.+\\.yaml$/"
     ]
@@ -21,7 +18,7 @@
       "enabled": false
     },
     {
-      "description": "Not a real image. k8s/spire/deployment.yaml uses a ko build directive, \"ko://github.com/spirl/spiffe-demo-app\", which the kubernetes manager parses down to a bare \"ko\" package with no version. Nothing can be resolved from it, so disable it rather than let it accumulate lookup failures on the dependency dashboard.",
+      "description": "Not a real image. The \"ko://\" build directive in k8s/spire/deployment.yaml parses down to a bare \"ko\" package with no version.",
       "matchManagers": [
         "kubernetes"
       ],
