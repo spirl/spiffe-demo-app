@@ -1,6 +1,6 @@
 module github.com/spirl/spiffe-demo-app
 
-go 1.26.0
+go 1.27.2
 
 require github.com/spiffe/go-spiffe/v2 v2.7.0
 
