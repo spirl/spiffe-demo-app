@@ -12,7 +12,7 @@ image:
 
 # -- Image used for busybox when enabled. Pinned to a release tag; ":latest"
 # is mutable. Bump deliberately when updating.
-busyboxImage: busybox:1.38.0
+busyboxImage: busybox:1.38.0@sha256:a46257e06c82ad85242d0d38077d0a52d9896389ca60a1a59d3463db586e5fa4
 
 spirldbg:
   # -- The spirldbg debug sidecar image. Key ends in "image" so Renovate tracks it.
